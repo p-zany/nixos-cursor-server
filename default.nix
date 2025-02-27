@@ -1,1 +1,1 @@
-import ./modules/cursor-server
+import ./modules/windsurf-server

@@ -4,7 +4,7 @@ moduleConfig: {
   pkgs,
   ...
 }: {
-  options.services.cursor-server = let
+  options.services.windsurf-server = let
     inherit (lib) mkEnableOption mkOption;
     inherit (lib.types) lines listOf nullOr package str;
   in {
@@ -34,8 +34,8 @@ moduleConfig: {
 
     installPath = mkOption {
       type = str;
-      default = "$HOME/.cursor-server";
-      example = "$HOME/.cursor-server-oss";
+      default = "$HOME/.windsurf-server";
+      example = "$HOME/.windsurf-server-oss";
       description = ''
         The install path.
       '';
@@ -53,17 +53,17 @@ moduleConfig: {
 
   config = let
     inherit (lib) mkDefault mkIf mkMerge;
-    cfg = config.services.cursor-server;
-    auto-fix-cursor-server =
-      pkgs.callPackage ../../pkgs/auto-fix-cursor-server.nix
+    cfg = config.services.windsurf-server;
+    auto-fix-windsurf-server =
+      pkgs.callPackage ../../pkgs/auto-fix-windsurf-server.nix
       (removeAttrs cfg [ "enable" ]);
   in
     mkIf cfg.enable (mkMerge [
       {
-        services.cursor-server.nodejsPackage = mkIf cfg.enableFHS (mkDefault pkgs.nodejs_20);
+        services.windsurf-server.nodejsPackage = mkIf cfg.enableFHS (mkDefault pkgs.nodejs_20);
       }
       (moduleConfig {
-        name = "auto-fix-cursor-server";
+        name = "auto-fix-windsurf-server";
         description = "Automatically fix the Cursor server used by the remote SSH extension";
         serviceConfig = {
           # When a monitored directory is deleted, it will stop being monitored.
@@ -72,7 +72,7 @@ moduleConfig: {
           # so rather than creating our own restart mechanism, we leverage systemd to do this for us.
           Restart = "always";
           RestartSec = 0;
-          ExecStart = "${auto-fix-cursor-server}/bin/auto-fix-cursor-server";
+          ExecStart = "${auto-fix-windsurf-server}/bin/auto-fix-windsurf-server";
         };
       })
     ]);

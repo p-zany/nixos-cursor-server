@@ -21,12 +21,12 @@
   enableFHS ? false,
   nodejsPackage ? null,
   extraRuntimeDependencies ? [ ],
-  installPath ? "$HOME/.cursor-server",
+  installPath ? "$HOME/.windsurf-server",
   postPatch ? "",
 }: let
   inherit (lib) makeBinPath makeLibraryPath optionalString;
 
-  # Based on: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/editors/cursor/generic.nix
+  # Based on: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/editors/windsurf/generic.nix
   runtimeDependencies =
     [
       stdenv.cc.libc
@@ -68,7 +68,7 @@
   };
 
   patchELFScript = writeShellApplication {
-    name = "patchelf-cursor-server";
+    name = "patchelf-windsurf-server";
     runtimeInputs = [ coreutils findutils patchelf ];
     text = ''
       bin_dir="$1"
@@ -115,12 +115,12 @@
       # Mark the bin directory as being fully patched.
       echo 1 > "$patched_file"
 
-      ${optionalString (postPatch != "") ''${writeShellScript "post-patchelf-cursor-server" postPatch} "$bin"''}
+      ${optionalString (postPatch != "") ''${writeShellScript "post-patchelf-windsurf-server" postPatch} "$bin"''}
     '';
   };
 
   autoFixScript = writeShellApplication {
-    name = "auto-fix-cursor-server";
+    name = "auto-fix-windsurf-server";
     runtimeInputs = [ coreutils findutils inotify-tools ];
     text = ''
       bins_dir_1=${installPath}/bin
@@ -134,7 +134,7 @@
           return 0
         fi
 
-        # Backwards compatibility with previous versions of nixos-cursor-server.
+        # Backwards compatibility with previous versions of nixos-windsurf-server.
         local old_patched_file
         old_patched_file="$(basename "$actual_dir")"
         if [[ $old_patched_file == "server" ]]; then
@@ -144,7 +144,7 @@
           old_patched_file="${installPath}/.''${old_patched_file%%-*}.patched"
         fi
         if [[ -e $old_patched_file ]]; then
-          echo "Migrating old nixos-cursor-server patch marker file to new location in $actual_dir." >&2
+          echo "Migrating old nixos-windsurf-server patch marker file to new location in $actual_dir." >&2
           cp "$old_patched_file" "$patched_file"
           return 0
         fi
@@ -166,7 +166,7 @@
 
         # We leave the rest up to the Bash script
         # to keep having to deal with 'sh' compatibility to a minimum.
-        ${patchELFScript}/bin/patchelf-cursor-server \$(dirname "\$0")
+        ${patchELFScript}/bin/patchelf-windsurf-server \$(dirname "\$0")
 
         # Let Node.js take over as if this script never existed.
         ${
@@ -178,7 +178,7 @@
         EOF
         chmod +x "$actual_dir/node"
 
-        sed -i '11a export UV_USE_IO_URING=0 # workaround for https://github.com/microsoft/vscode/issues/212678\n' "$actual_dir/bin/cursor-server"
+        sed -i '11a export UV_USE_IO_URING=0 # workaround for https://github.com/microsoft/vscode/issues/212678\n' "$actual_dir/bin/windsurf-server"
       ''}
 
         # Mark the bin directory as being patched.
@@ -206,7 +206,7 @@
             mkdir -p "$actual_dir"
           fi
           echo "Cursor server is being installed in $actual_dir..." >&2
-          # Quickly create a node file, which will be removed when cursor installs its own version
+          # Quickly create a node file, which will be removed when windsurf installs its own version
           touch "$actual_dir/node"
           # Hope we don't race...
           inotifywait -qq -e DELETE_SELF "$actual_dir/node"

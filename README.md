@@ -14,10 +14,10 @@ you'll have to manually enable the service for each user (see below).
 ```nix
 {
   imports = [
-    (fetchTarball "https://github.com/warmingking/nixos-cursor-server/tarball/master")
+    (fetchTarball "https://github.com/warmingking/nixos-windsurf-server/tarball/master")
   ];
 
-  services.cursor-server.enable = true;
+  services.windsurf-server.enable = true;
 }
 ```
 
@@ -25,14 +25,14 @@ you'll have to manually enable the service for each user (see below).
 
 ```nix
 {
-  inputs.cursor-server.url = "github:warmingking/nixos-cursor-server";
+  inputs.windsurf-server.url = "github:warmingking/nixos-windsurf-server";
 
-  outputs = { self, nixpkgs, cursor-server }: {
+  outputs = { self, nixpkgs, windsurf-server }: {
     nixosConfigurations.yourhostname = nixpkgs.lib.nixosSystem {
       modules = [
-        cursor-server.nixosModules.default
+        windsurf-server.nixosModules.default
         ({ config, pkgs, ... }: {
-          services.cursor-server.enable = true;
+          services.windsurf-server.enable = true;
         })
       ];
     };
@@ -45,7 +45,7 @@ you'll have to manually enable the service for each user (see below).
 And then enable them for the relevant users:
 
 ```bash
-systemctl --user enable auto-fix-cursor-server.service
+systemctl --user enable auto-fix-windsurf-server.service
 ```
 
 You will see the following message:
@@ -69,12 +69,12 @@ Possible reasons for having this kind of units are:
 However you can safely ignore it. The service will start automatically after reboot once enabled, or you can just start it immediately yourself with:
 
 ```bash
-systemctl --user start auto-fix-cursor-server.service
+systemctl --user start auto-fix-windsurf-server.service
 ```
 
 Enabling the user service creates a symlink to the Nix store, but the linked store path could be garbage collected at some point. One workaround to this particular issue is creating the following symlink:
 ```bash
-ln -sfT /run/current-system/etc/systemd/user/auto-fix-cursor-server.service ~/.config/systemd/user/auto-fix-cursor-server.service
+ln -sfT /run/current-system/etc/systemd/user/auto-fix-windsurf-server.service ~/.config/systemd/user/auto-fix-windsurf-server.service
 ```
 
 ### Home Manager
@@ -84,10 +84,10 @@ Put this code into your [home-manager](https://github.com/warmingking/home-manag
 ```nix
 {
   imports = [
-    "${fetchTarball "https://github.com/msteen/nixos-cursor-server/tarball/master"}/modules/cursor-server/home.nix"
+    "${fetchTarball "https://github.com/msteen/nixos-windsurf-server/tarball/master"}/modules/windsurf-server/home.nix"
   ];
 
-  services.cursor-server.enable = true;
+  services.windsurf-server.enable = true;
 }
 ```
 
@@ -100,7 +100,7 @@ Whether to enable the service or not.
 
 ```nix
 {
-  services.cursor-server.enable = true;
+  services.windsurf-server.enable = true;
 }
 ```
 
@@ -109,7 +109,7 @@ A FHS ([Filesystem Hierarchy Standard](https://en.wikipedia.org/wiki/Filesystem_
 
 ```nix
 {
-  services.cursor-server.enableFHS = true;
+  services.windsurf-server.enableFHS = true;
 }
 ```
 
@@ -122,7 +122,7 @@ Disclaimer: I am not a very active user of this extension and even NixOS (at the
 
 ```nix
 {
-  services.cursor-server.nodejsPackage = pkgs.nodejs-16_x;
+  services.windsurf-server.nodejsPackage = pkgs.nodejs-16_x;
 }
 ```
 
@@ -133,7 +133,7 @@ This same list is also used to determine the `RPATH` when automatically patching
 
 ```nix
 {
-  services.cursor-server.extraRuntimeDependencies = pkgs: with pkgs; [
+  services.windsurf-server.extraRuntimeDependencies = pkgs: with pkgs; [
     curl
   ];
 }
@@ -144,7 +144,7 @@ The installation path for Cursor server is configurable and the default can diff
 
 ```nix
 {
-  services.cursor-server.installPath = "$HOME/.cursor-server-oss";
+  services.windsurf-server.installPath = "$HOME/.windsurf-server-oss";
 }
 ```
 
@@ -153,9 +153,9 @@ The goal of this project is to make Cursor server work with NixOS, anything more
 
 ```nix
 {
-  services.cursor-server.postPatch = ''
+  services.windsurf-server.postPatch = ''
     bin=$1
-    bin_dir=${config.services.cursor-server.installPath}/bin/$bin
+    bin_dir=${config.services.windsurf-server.installPath}/bin/$bin
     # ...
   '';
 }
@@ -166,7 +166,7 @@ The goal of this project is to make Cursor server work with NixOS, anything more
 This is not really an issue with this project per se, but with systemd user services in NixOS in general. After updating it can be necessary to first disable the service again:
 
 ```bash
-systemctl --user disable auto-fix-cursor-server.service
+systemctl --user disable auto-fix-windsurf-server.service
 ```
 
 This will remove the symlink to the old version. Then you can enable/start it again.
