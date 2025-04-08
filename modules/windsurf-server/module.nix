@@ -8,7 +8,7 @@ moduleConfig: {
     inherit (lib) mkEnableOption mkOption;
     inherit (lib.types) lines listOf nullOr package str;
   in {
-    enable = mkEnableOption "Cursor Server";
+    enable = mkEnableOption "Windsurf Server";
 
     enableFHS = mkEnableOption "a FHS compatible environment";
 
@@ -17,7 +17,7 @@ moduleConfig: {
       default = null;
       example = pkgs.nodejs_20;
       description = ''
-        Whether to use a specific Node.js rather than the version supplied by Cursor server.
+        Whether to use a specific Node.js rather than the version supplied by Windsurf server.
       '';
     };
 
@@ -45,7 +45,7 @@ moduleConfig: {
       type = lines;
       default = "";
       description = ''
-        Lines of Bash that will be executed after the Cursor server installation has been patched.
+        Lines of Bash that will be executed after the Windsurf server installation has been patched.
         This can be used as a hook for custom further patching.
       '';
     };
@@ -64,7 +64,7 @@ moduleConfig: {
       }
       (moduleConfig {
         name = "auto-fix-windsurf-server";
-        description = "Automatically fix the Cursor server used by the remote SSH extension";
+        description = "Automatically fix the Windsurf server used by the remote SSH extension";
         serviceConfig = {
           # When a monitored directory is deleted, it will stop being monitored.
           # Even if it is later recreated it will not restart monitoring it.

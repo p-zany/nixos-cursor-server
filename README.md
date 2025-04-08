@@ -1,6 +1,6 @@
 # Curosr Server support in NixOS
 
-Experimental support for Cursor Server in NixOS. The NodeJS by default supplied by Cursor cannot be used within NixOS due to missing hardcoded paths, so it is automatically replaced by a symlink to a compatible version of NodeJS that does work under NixOS.
+Experimental support for Windsurf Server in NixOS. The NodeJS by default supplied by Windsurf cannot be used within NixOS due to missing hardcoded paths, so it is automatically replaced by a symlink to a compatible version of NodeJS that does work under NixOS.
 
 ## Installation
 
@@ -93,7 +93,7 @@ Put this code into your [home-manager](https://github.com/warmingking/home-manag
 
 ## Usage
 
-When using Cursor as released by Microsoft without any special needs, just enabling and starting the service should be enough to make things work. If you have some custom build or needs, there are a few options available that might help you out.
+When using Windsurf as released by Microsoft without any special needs, just enabling and starting the service should be enough to make things work. If you have some custom build or needs, there are a few options available that might help you out.
 
 ### `enable`
 Whether to enable the service or not.
@@ -114,9 +114,9 @@ A FHS ([Filesystem Hierarchy Standard](https://en.wikipedia.org/wiki/Filesystem_
 ```
 
 ### `nodejsPackage`
-By default Cursor server will install the version of Node.js it needs, and this service will automatically patch it, but if you want to minimize disk space or want it to use some specific version of Node.js, you can specify which Nix package for Node.js it should use.
+By default Windsurf server will install the version of Node.js it needs, and this service will automatically patch it, but if you want to minimize disk space or want it to use some specific version of Node.js, you can specify which Nix package for Node.js it should use.
 
-When `enableFHS` is set to `true` it will always require a Nix package for Node.js, but you are not required to set it, as it will default to the latest version used by Cursor.
+When `enableFHS` is set to `true` it will always require a Nix package for Node.js, but you are not required to set it, as it will default to the latest version used by Windsurf.
 
 Disclaimer: I am not a very active user of this extension and even NixOS (at the moment), so it can happen that the default is out of date. At least by having it as an option you can workaround it until the default get updated.
 
@@ -140,7 +140,7 @@ This same list is also used to determine the `RPATH` when automatically patching
 ```
 
 ### `installPath`
-The installation path for Cursor server is configurable and the default can differ for alternative builds (e.g. oss and insider), so this option allows you to configure which installation path should be monitered and automatically fixed.
+The installation path for Windsurf server is configurable and the default can differ for alternative builds (e.g. oss and insider), so this option allows you to configure which installation path should be monitered and automatically fixed.
 
 ```nix
 {
@@ -149,7 +149,7 @@ The installation path for Cursor server is configurable and the default can diff
 ```
 
 ### `postPatch`
-The goal of this project is to make Cursor server work with NixOS, anything more is outside of the scope of the project, but if you want additional things to be done, you can use this hook to run a shell script after the patching is done.
+The goal of this project is to make Windsurf server work with NixOS, anything more is outside of the scope of the project, but if you want additional things to be done, you can use this hook to run a shell script after the patching is done.
 
 ```nix
 {
@@ -177,17 +177,17 @@ If the remote SSH session fails to start with this error:
 
 > Failed to connect to the remote extension host server (Error: Connecting with SSH timed out)
 
-Try adding this to your Cursor settings json:
+Try adding this to your Windsurf settings json:
 ```json
     "remote.SSH.useLocalServer": false,
 ```
 
-Tested on Cursor version 1.63.2, connecting to the NixOS remote from a MacOS host.
+Tested on Windsurf version 1.63.2, connecting to the NixOS remote from a MacOS host.
 
 ## Future work
 
 ### Patching extensions
-More work is needed to see if it is possible to also automatically patch binaries in Cursor extensions without using the FHS compatible environment.
+More work is needed to see if it is possible to also automatically patch binaries in Windsurf extensions without using the FHS compatible environment.
 
 ### WSL support
 Some work has been done to get WSL to work out of the box, but it is not working quite yet.

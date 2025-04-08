@@ -1,5 +1,5 @@
 {
-  description = "NixOS Cursor server";
+  description = "NixOS Windsurf server";
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
